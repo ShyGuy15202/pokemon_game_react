@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import CardBaseSvg from './cardBaseSvg'
+import CardBaseSvg from './CardBaseSvg'
 
-import { BasicStatsSvgs } from '../utilities/basicStatsName'
+import { BasicStatsSvgs } from '../utilities/BasicStatsName'
 import StatsTypeBtn from './StatsTypeBtn'
 
 
