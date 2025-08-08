@@ -1,0 +1,27 @@
+import React from 'react'
+import { CircleArrowLeft } from 'lucide-react'
+import pokedex from '../../assets/img/pokedex.png'
+import { replace, useNavigate } from 'react-router'
+const Nav = () => {
+const navigate=useNavigate()
+function handleNavigate() {
+  navigate('/',{replace:true})
+}
+
+
+  return (
+    <div className='relative w-full h-16 flex items-center justify-center '>
+       <div onClick={handleNavigate} className='absolute flex items-center cursor-pointer gap-2 font-paragraph left-5'>
+            <CircleArrowLeft size={28} /> 
+            <h2 className='hidden  lg:block '>Back</h2>
+       </div>
+        <div className='flex gap-3  font-headings items-center'>
+        <img src={pokedex} alt="POkedex Image" className='h-10' />
+        <h1 className='text-[2rem]'>Pokedex</h1>
+      </div>
+    </div>
+     
+  )
+}
+
+export default Nav
