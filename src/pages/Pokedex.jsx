@@ -10,7 +10,7 @@ import Nav from '../components/navComp/Nav'
 
 const Pokedex = () => {
   // collects Input data
-  const [inputvalue,setInputValue]=useState()         //Stores Input Value
+  const [inputvalue,setInputValue]=useState('')         //Stores Input Value
   const prevValue=useRef()                            //stores last value (made to avoid re-render)
   const [searchh,setSearch]=useState(null)            //Value to be fetched
 
@@ -30,6 +30,9 @@ const Pokedex = () => {
   
 ///////////////////////////////////////////
 
+useEffect(()=>{
+
+},[])
 
 
 // setting the fetch data into card
@@ -37,11 +40,8 @@ const [cardData,setcardData]=useState(null)
 const [typeArray,setTypeArray]=useState([])
 let type=[]
 const [cardImg,setcardImg]=useState(null)
-function pokefetch(e) {
-  Api.get(`/${e}`)
-  .then((res)=>setcardData(res.data))
-  .catch((err)=>console.log(err))}
 ///////////////////////////////////////////
+
 //Also Getting img from hosted url
 useEffect(()=>{
 if(!cardData){setcardImg(null)
@@ -61,7 +61,10 @@ console.log(typeArray);
 },[cardData,])
 
 
-
+function pokefetch(e) {
+  Api.get(`/${e}`)
+  .then((res)=>setcardData(res.data))
+  .catch((err)=>console.log(err))}
 
 
   return (
@@ -77,8 +80,15 @@ console.log(typeArray);
         <h1 className='-mb-2 font-paragraph'>Search for Pokemon</h1>    
     
         <div className='flex items-center mt-3 gap-5'>
-        <input type="text" value={inputvalue} onChange={(e)=>setInputValue(e.target.value)}  className='w-[18rem] md:w-96 lg:w-96 font-paragraph font-normal text-brandColors-black bg-gray-50 h-14 border-2 border-gray-900 focus:border-b-4  focus:outline-none rounded-md px-4 transition-all  ease-in' />
-        <button onClick={handlepokemonfetch} className='h-14 w-14 rounded-md flex gap-2
+        <input type="text" value={inputvalue}
+         onChange={(e)=>setInputValue(e.target.value)} 
+         onKeyDown={(e)=>{
+          if (e.key=='Enter'){
+            console.log(e);
+            e.preventDefault()
+         handlepokemonfetch()}}}  className='w-[18rem] md:w-96 lg:w-96 font-paragraph font-normal text-brandColors-black bg-gray-50 h-14 border-2 border-gray-900 focus:border-b-4  focus:outline-none rounded-md px-4 transition-all  ease-in' />
+        <button onClick={handlepokemonfetch} 
+        className='h-14 w-14 rounded-md flex gap-2
         justify-center items-center border-2 border-gray-900 text-brandColors-black bg-brandColors-yellow'>
         <Search color='#141414' size={28} />
         </button>  
@@ -96,13 +106,7 @@ console.log(typeArray);
       </div>
       </div>
     
-      <Card value={searchh} fetchedData={cardData} fetchImgUrl={cardImg} pokemonType={typeArray}/>
-      {randomData && randomData?.map((e)=>{ 
-        <Card  fetchedData={e} />
-
-      })
-      }
-
+      <Card  fetchedData={cardData} fetchImgUrl={cardImg} pokemonType={typeArray}/>
       </div>
 
       </div>
