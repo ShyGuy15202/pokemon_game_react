@@ -1,5 +1,3 @@
-import React, { useEffect, useRef, useState } from 'react'
-
 import CardBaseSvg from './CardBaseSvg'
 
 import { BasicStatsSvgs } from '../utilities/BasicStatsName'

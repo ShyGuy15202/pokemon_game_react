@@ -1,18 +1,19 @@
 import axios from "axios";
+import { useState } from "react";
 export const Api=axios.create({
     baseURL:'https://pokeapi.co/api/v2/pokemon/'
 })
 
 const ApiAll=axios.create()
-async function showRandom(limitrandom,Offset) {
+ let randomData
+async function showRandom() {
     const totalPokemon=1302
-    const minVal=1
-    const maxVal=10
-    limitrandom=Math.round(Math.random()*(maxVal-minVal+1))
-    console.log('limitrandom=>',limitrandom);
-    Offset=Math.round(Math.random()*(totalPokemon-limitrandom+1))
-    const url=`https://pokeapi.co/api/v2/pokemon?limit=${limitrandom}&offset=${Offset}`
+    const limitrandom=1
+    const offset=Math.round(Math.random()*(totalPokemon-limitrandom+1))
+    const url=`https://pokeapi.co/api/v2/pokemon?limit=${limitrandom}&offset=${offset}`
     const res=await ApiAll.get(url)
-    console.log(res.data.results);}
+    console.log(res.data.results);
+    randomData=res.data.results
+    return randomData}
 
-export {showRandom}
+export {showRandom,randomData}

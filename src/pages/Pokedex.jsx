@@ -2,34 +2,41 @@ import React, { useEffect, useRef, useState } from 'react'
 import PokedexBg from '../assets/img/Bg/1179208-final (1) copy.webp'
 import { Search, RefreshCw } from 'lucide-react'
 import { pokemontypedata } from '../components/utilities/PokemonType' 
-import {Api, showRandom} from '../components/utilities/axios'
+import {Api, showRandom,randomData} from '../components/utilities/axios'
 import Button from '../components/button/Button'
 import Card from '../components/card/Card'
-import { useForm } from 'react-hook-form'
 import Nav from '../components/navComp/Nav'
+
+
 const Pokedex = () => {
   // collects Input data
-const [searchh,setSearch]=useState('')
-useEffect(()=>{  
-  if (searchh && searchh !== prevValue.current) {
-      prevValue.current = searchh;
-      pokefetch(searchh)}
-},[searchh])
+  const [inputvalue,setInputValue]=useState()         //Stores Input Value
+  const prevValue=useRef()                            //stores last value (made to avoid re-render)
+  const [searchh,setSearch]=useState(null)            //Value to be fetched
+
+  //Checks Value and trims to avoid gaps and gives value to searchh
+  function handlepokemonfetch(){
+    if (!inputvalue.trim) return
+    setSearch( inputvalue.trim().toLowerCase())
+    setInputValue('')}
+
+  //Final function to fech searched Value
+  useEffect(()=>{   
+  if(searchh && searchh !== prevValue.current){
+    prevValue.current=searchh
+    pokefetch(searchh)
+    setSearch('')}
+  },[searchh])
+  
 ///////////////////////////////////////////
-//submits to fetch according to input data also resets 
-const {register,reset,handleSubmit} =useForm()
-function submitHandler(data){
-  setSearch(data.pokemon)
-  console.log(data);
-reset()
-}
+
+
 
 // setting the fetch data into card
 const [cardData,setcardData]=useState(null)
 const [typeArray,setTypeArray]=useState([])
 let type=[]
 const [cardImg,setcardImg]=useState(null)
-const prevValue=useRef()
 function pokefetch(e) {
   Api.get(`/${e}`)
   .then((res)=>setcardData(res.data))
@@ -53,10 +60,6 @@ setTypeArray(type)
 console.log(typeArray);
 },[cardData,])
 
-function fetch() {
-  showRandom()
-}
-
 
 
 
@@ -73,16 +76,16 @@ function fetch() {
       <div className='flex flex-col mt-2'>
         <h1 className='-mb-2 font-paragraph'>Search for Pokemon</h1>    
     
-        <form onSubmit={handleSubmit(submitHandler)} className='flex items-center mt-3 gap-5'>
-        <input type="text" {...register('pokemon')} className='w-[18rem] md:w-96 lg:w-96 font-paragraph font-normal text-brandColors-black bg-gray-50 h-14 border-2 border-gray-900 focus:border-b-4  focus:outline-none rounded-md px-4 transition-all  ease-in' />
-        <button className='h-14 w-14 rounded-md flex gap-2
+        <div className='flex items-center mt-3 gap-5'>
+        <input type="text" value={inputvalue} onChange={(e)=>setInputValue(e.target.value)}  className='w-[18rem] md:w-96 lg:w-96 font-paragraph font-normal text-brandColors-black bg-gray-50 h-14 border-2 border-gray-900 focus:border-b-4  focus:outline-none rounded-md px-4 transition-all  ease-in' />
+        <button onClick={handlepokemonfetch} className='h-14 w-14 rounded-md flex gap-2
         justify-center items-center border-2 border-gray-900 text-brandColors-black bg-brandColors-yellow'>
         <Search color='#141414' size={28} />
         </button>  
-        </form>
+        </div>
       
         <div className='mt-2 flex gap-5'>
-        <Button onlyicon={true} >
+        <Button onlyicon={true} onclick={showRandom} >
         <h1>Random</h1>
         <RefreshCw size={20} />
         </Button>
@@ -94,7 +97,11 @@ function fetch() {
       </div>
     
       <Card value={searchh} fetchedData={cardData} fetchImgUrl={cardImg} pokemonType={typeArray}/>
+      {randomData && randomData?.map((e)=>{ 
+        <Card  fetchedData={e} />
 
+      })
+      }
 
       </div>
 
