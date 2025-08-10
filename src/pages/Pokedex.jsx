@@ -11,6 +11,7 @@ import Loader from '../components/Loader'
 
 const Pokedex = () => {
   const [loading,setLoading]=useState(true)
+  const [cardLoading,setcardLoading]=useState(false)
   // collects Input data
   const [inputvalue,setInputValue]=useState('')         //Stores Input Value
   const prevValue=useRef()                            //stores last value (made to avoid re-render)
@@ -35,60 +36,60 @@ const Pokedex = () => {
 // setting the fetch data into card
 const [cardData,setcardData]=useState(null)
 const [typeArray,setTypeArray]=useState([])
-let type=[]
+
 const [cardImg,setcardImg]=useState(null)
 ///////////////////////////////////////////
-
 async function handlerandom() {
+  setcardLoading(true)
   try{
     const result = await showRandom();
    let random= result[Math.floor(Math.random()*result.length)]
-    console.log(random,result);
-  
-   await pokefetch(random.name)
-      
-    }
+   await pokefetch(random.name)  }
   catch(error) { console.log(error)}
 
-  
 }
  
-
-
 //Also Getting img from hosted url
 useEffect(()=>{
-if(!cardData){setcardImg(null)
-              return}
-else{setcardImg(`https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/${cardData?.id?.toString().padStart(3, '0')}.png`)}
-// console.log(cardData?.types);
+  
+if(!cardData)setcardImg(null)
+setcardImg(`https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/${cardData?.id?.toString().padStart(3, '0')}.png`)
+
 let type=[]
 //Injecting same types into type array
-const btnColor=pokemontypedata.map((e)=>{
+pokemontypedata.map((e)=>{
     cardData?.types.map((t)=> {
     if(t.type.name==e.type){
     type=[...type,e.btnBgColor]}
-    })    
+  })    
 })
 console.log(type);
 setTypeArray(type)
 },[cardData])
 
 
-function pokefetch(e) {
- return Api.get(`/${e}`)
-  .then((res)=>{
-    console.log(res);
-    setcardData(res.data)})
-  .catch((err)=>{
-    console.log(err);  
-  })}
+async function pokefetch(e) {
+setcardLoading(true)
+return Api.get(`/${e}`)
+.then((res)=>{
+setcardData(res.data)
 
-  useEffect(() => {
-    setTimeout(()=>{
-      setLoading(false)
+})
+.catch((err)=>{
+console.log(err)
+setcardLoading(false)
+})
+}
 
-    },5000)
-  }, []);
+
+useEffect(()=>{
+  setTimeout(()=>{
+    setLoading(false)
+
+  },2000)
+})
+
+
 
   if (loading) {
     return <Loader/>; // Only loader until ready
@@ -134,8 +135,17 @@ function pokefetch(e) {
       </div>
     
       <div>
-            
-      <Card  fetchedData={cardData} fetchImgUrl={cardImg} pokemonType={typeArray}/>
+      {/* {cardLoading ?
+       ( cardData ?
+        (<div>Loading...</div>) : null ) : (cardData && <Card  fetchedData={cardData} fetchImgUrl={cardImg} pokemonType={typeArray} />)
+        
+       } */}
+       {/* {(cardLoading && !cardData) ?<h1>loading</h1>  : <Card  fetchedData={cardData} fetchImgUrl={cardImg} pokemonType={typeArray} /> }
+       */}
+
+        {cardLoading && <h1>loading</h1>}
+        {cardData && <Card removeloading={{setcardLoading}} fetchedData={cardData} fetchImgUrl={cardImg} pokemonType={typeArray} />}
+
       </div>
 
  

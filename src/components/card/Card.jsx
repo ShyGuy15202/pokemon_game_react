@@ -4,15 +4,18 @@ import { BasicStatsSvgs } from '../utilities/BasicStatsName'
 import StatsTypeBtn from './StatsTypeBtn'
 
 
-const Card = ({value,fetchedData,fetchImgUrl,pokemonType}) => {
+const Card = ({removeloading,value,fetchedData,fetchImgUrl,pokemonType}) => {
 
-
-
-
-
+const {setcardLoading , cardLoading}=removeloading
+function delayLoader(){
+setTimeout(()=>{
+  setcardLoading(false)
+},1000)
+}
 return (
   // CardWrapper
-<div className='relative mt-2 w-96 flex items-center justify-center'>
+<div className='relative mt-2 w-96 flex items-center justify-center' onLoad={()=>setcardLoading(false)
+}  >
   {/* Card Svg Background Shape */}
   {fetchedData && fetchedData?.name && (
     <CardBaseSvg typeData={fetchedData?.types}/>)}
