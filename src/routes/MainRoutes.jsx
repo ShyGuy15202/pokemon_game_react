@@ -1,13 +1,24 @@
-import React, { lazy, Suspense } from 'react'
-import { Routes,Route } from 'react-router'
+import React, { lazy, Suspense, useEffect, useState } from 'react'
+import { Routes,Route, useLocation } from 'react-router'
 import Loader from '../components/Loader'
 const Home=lazy(()=>import('../pages/Home'))
 const Pokedex=lazy(()=>import('../pages/Pokedex'))
 
-
-
-
 const MainRoutes = () => {
+
+
+      const [loading,setLoading]=useState(true)
+  useEffect(() => {
+    setTimeout(()=>{
+      setLoading(false)
+
+    },5000)
+  }, []);
+
+  if (loading) {
+    return <Loader/>; // Only loader until ready
+  }
+
 
   return (
     <Suspense fallback={<Loader/>}>
@@ -20,3 +31,19 @@ const MainRoutes = () => {
 }
 
 export default MainRoutes
+
+
+  // const [pageReady,setPageReady]=useState(false)
+  // const location=useLocation()
+  // useEffect(()=>{
+  //   setPageReady(false)
+  //   const handleReady=()=>setPageReady(true)
+  //   if(document.readyState==='complete'){handleReady()}
+  //   else{
+  //     window.addEventListener('load',handleReady)
+  //    return ()=> window.removeEventListener('load',handleReady)
+  //   }
+    
+  // },[location.pathname])
+
+  // if(!pageReady) return <Loader/>

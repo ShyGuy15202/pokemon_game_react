@@ -2,13 +2,15 @@ import React, { useEffect, useRef, useState } from 'react'
 import PokedexBg from '../assets/img/Bg/1179208-final (1) copy.webp'
 import { Search, RefreshCw } from 'lucide-react'
 import { pokemontypedata } from '../components/utilities/PokemonType' 
-import {Api, showRandom,randomData} from '../components/utilities/axios'
+import {Api, showRandom} from '../components/utilities/axios'
 import Button from '../components/button/Button'
 import Card from '../components/card/Card'
 import Nav from '../components/navComp/Nav'
+import Loader from '../components/Loader'
 
 
 const Pokedex = () => {
+  const [loading,setLoading]=useState(true)
   // collects Input data
   const [inputvalue,setInputValue]=useState('')         //Stores Input Value
   const prevValue=useRef()                            //stores last value (made to avoid re-render)
@@ -16,7 +18,7 @@ const Pokedex = () => {
 
   //Checks Value and trims to avoid gaps and gives value to searchh
   function handlepokemonfetch(){
-    if (!inputvalue.trim) return
+    if (!inputvalue.trim()) return
     setSearch( inputvalue.trim().toLowerCase())
     setInputValue('')}
 
@@ -30,11 +32,6 @@ const Pokedex = () => {
   
 ///////////////////////////////////////////
 
-useEffect(()=>{
-
-},[])
-
-
 // setting the fetch data into card
 const [cardData,setcardData]=useState(null)
 const [typeArray,setTypeArray]=useState([])
@@ -42,13 +39,29 @@ let type=[]
 const [cardImg,setcardImg]=useState(null)
 ///////////////////////////////////////////
 
+async function handlerandom() {
+  try{
+    const result = await showRandom();
+   let random= result[Math.floor(Math.random()*result.length)]
+    console.log(random,result);
+  
+   await pokefetch(random.name)
+      
+    }
+  catch(error) { console.log(error)}
+
+  
+}
+ 
+
+
 //Also Getting img from hosted url
 useEffect(()=>{
 if(!cardData){setcardImg(null)
               return}
 else{setcardImg(`https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/${cardData?.id?.toString().padStart(3, '0')}.png`)}
 // console.log(cardData?.types);
-type=[]
+let type=[]
 //Injecting same types into type array
 const btnColor=pokemontypedata.map((e)=>{
     cardData?.types.map((t)=> {
@@ -56,16 +69,30 @@ const btnColor=pokemontypedata.map((e)=>{
     type=[...type,e.btnBgColor]}
     })    
 })
+console.log(type);
 setTypeArray(type)
-console.log(typeArray);
-},[cardData,])
+},[cardData])
 
 
 function pokefetch(e) {
-  Api.get(`/${e}`)
-  .then((res)=>setcardData(res.data))
-  .catch((err)=>console.log(err))}
+ return Api.get(`/${e}`)
+  .then((res)=>{
+    console.log(res);
+    setcardData(res.data)})
+  .catch((err)=>{
+    console.log(err);  
+  })}
 
+  useEffect(() => {
+    setTimeout(()=>{
+      setLoading(false)
+
+    },5000)
+  }, []);
+
+  if (loading) {
+    return <Loader/>; // Only loader until ready
+  }
 
   return (
     <div className={`relative`}> 
@@ -95,7 +122,7 @@ function pokefetch(e) {
         </div>
       
         <div className='mt-2 flex gap-5'>
-        <Button onlyicon={true} onclick={showRandom} >
+        <Button onlyicon={true} onclick={handlerandom}  >
         <h1>Random</h1>
         <RefreshCw size={20} />
         </Button>
@@ -106,7 +133,12 @@ function pokefetch(e) {
       </div>
       </div>
     
+      <div>
+            
       <Card  fetchedData={cardData} fetchImgUrl={cardImg} pokemonType={typeArray}/>
+      </div>
+
+ 
       </div>
 
       </div>
