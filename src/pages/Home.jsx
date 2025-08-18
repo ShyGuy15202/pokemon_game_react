@@ -63,10 +63,12 @@ gsap.to(guessThePokemon.current,{
           </span>
          </button>
         </NavLink>
+        <NavLink to='/whos-that-pokemon'>
         <button className='w-80 h-14 text-lg font-semibold font-paragraph rounded-full  mt-5 bg-brandColors-yellow text-brandColors-black border-brandColors-darkBlue border-[3px] flex items-center justify-center gap-2'>
          <img src='https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/025.png' alt="POkedexIcon" className='h-8 grayscale brightness-0 -scale-x-100' />
           <span ref={guessThePokemon}>Whos That Pokemon ?</span> 
           </button>
+        </NavLink>
         </div>
         <video 
         autoPlay 

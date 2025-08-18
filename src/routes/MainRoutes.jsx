@@ -1,6 +1,7 @@
 import React, { lazy, Suspense, useEffect, useState } from 'react'
 import { Routes,Route, useLocation } from 'react-router'
 import Loader from '../components/Loader'
+import WhosthatPokemon from '../components/WhosthatPokemon'
 const Home=lazy(()=>import('../pages/Home'))
 const Pokedex=lazy(()=>import('../pages/Pokedex'))
 
@@ -25,6 +26,7 @@ const MainRoutes = () => {
    <Routes>
     <Route path='/' element={<Home/>}/>
     <Route path='/pokedex' element={<Pokedex/>}/>
+    <Route path='/whos-that-pokemon' element={<WhosthatPokemon/>}/>
    </Routes>
    </Suspense>
   )

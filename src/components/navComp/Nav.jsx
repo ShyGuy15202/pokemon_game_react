@@ -1,8 +1,7 @@
 import React from 'react'
 import { CircleArrowLeft } from 'lucide-react'
-import pokedex from '../../assets/img/pokedex.png'
 import { replace, useNavigate } from 'react-router'
-const Nav = () => {
+const Nav = (props) => {
 const navigate=useNavigate()
 function handleNavigate() {
   navigate('/',{replace:true})
@@ -16,8 +15,8 @@ function handleNavigate() {
             <h2 className='hidden  lg:block '>Back</h2>
        </div>
         <div className='flex gap-3  font-headings items-center'>
-        <img src={pokedex} alt="POkedex Image" className='h-10' />
-        <h1 className='text-[2rem]'>Pokedex</h1>
+       {props.children}
+       
       </div>
     </div>
      

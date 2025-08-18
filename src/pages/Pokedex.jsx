@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PokedexBg from '../assets/img/Bg/1179208-final (1) copy.webp'
+import pokedex from '../assets/img/pokedex.png'
 import { Search, RefreshCw } from 'lucide-react'
 import { pokemontypedata } from '../components/utilities/PokemonType'
 import { Api, showRandom } from '../components/utilities/axios'
@@ -145,7 +146,11 @@ const Pokedex = () => {
       </div>
 
       <div className="absolute z-[1] top-0 left-0 w-full flex flex-col items-center">
-        <Nav />
+        <Nav>
+         <img src={pokedex} alt="POkedex Image" className='h-10' />
+          <h1 className='text-[2rem]'>Pokedex</h1>
+        </Nav>
+
 
         {/* Search */}
         <div ref={searchSectionRef} className="flex flex-col mt-2">
