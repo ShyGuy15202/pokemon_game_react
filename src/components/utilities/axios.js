@@ -19,10 +19,10 @@ export const Api=axios.create({
 // export {showRandom}
 
 
-const ApiAll = axios.create();
+const axiosAll = axios.create();
 
 async function showRandom() {
-  const totalPokemon = 1000; 
+  const totalPokemon = 1000;
   const limit = 15;
 
   // ensure offset + limit ≤ totalPokemon
@@ -30,9 +30,18 @@ async function showRandom() {
   const offset = Math.floor(Math.random() * (maxOffset + 1)); 
 
   const url = `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`;
-  const res = await ApiAll.get(url);
+  const res = await axiosAll.get(url);
 
   return res.data.results;
 }
 
-export { showRandom };
+async function suggestionPokemon() {
+ const suggestionLimit=100000
+
+  const url = `https://pokeapi.co/api/v2/pokemon?limit=${suggestionLimit}&offset=0`
+  const res = await axiosAll.get(url)
+  return res.data.results
+}
+
+
+export { showRandom,suggestionPokemon };

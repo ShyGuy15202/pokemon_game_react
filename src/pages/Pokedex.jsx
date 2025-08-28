@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import PokedexBg from '../assets/img/Bg/1179208-final (1) copy.webp'
 import pokedex from '../assets/img/pokedex.png'
 import { Search, RefreshCw } from 'lucide-react'
@@ -9,6 +9,7 @@ import Card from '../components/card/Card'
 import Nav from '../components/navComp/Nav'
 import Loader from '../components/Loader'
 import gsap from 'gsap'
+import { useSuggestions } from '../customHooks/useSuggestions'
 import { useGSAP } from '@gsap/react'
 
 const Pokedex = () => {
@@ -122,8 +123,7 @@ const Pokedex = () => {
   useEffect(() => {
     if (!cardData) {
       setTypeArray([])
-      return
-    }
+      return}
 
     let typeColors = []
     pokemontypedata.forEach((e) => {
@@ -135,6 +135,12 @@ const Pokedex = () => {
     })
     setTypeArray(typeColors)
   }, [cardData])
+
+// card fetch
+  const { allPokemonNames,allFilteredPok} = useSuggestions(inputValue)
+  console.log(allFilteredPok);
+  
+
 
   if (loading) return <Loader />
 
@@ -183,7 +189,8 @@ const Pokedex = () => {
               <h1>Random</h1>
               <RefreshCw size={20} />
             </Button>
-            <Button onlyicon={true}>
+            <Button onlyicon={true} onclick={console.log('hiii')
+            }>
               <h1>Show All</h1>
               <RefreshCw size={20} />
             </Button>
