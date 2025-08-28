@@ -14,7 +14,7 @@ const WhosthatPokemon = () => {
        <WhosThatPokemmonLogo />
       </Nav>
 
-      {/* <Leaderboard/> */}
+      <Leaderboard/>
         {/* Main */}
       <div className='w-full border-2 px-5 grid grid-cols-6 gap-5'>
         <div className='col-span-6 '>
